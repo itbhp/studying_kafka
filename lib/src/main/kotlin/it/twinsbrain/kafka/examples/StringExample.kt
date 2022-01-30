@@ -1,7 +1,9 @@
 package it.twinsbrain.kafka.examples
 
 import org.apache.kafka.clients.consumer.ConsumerConfig
+import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.clients.producer.ProducerConfig
+import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.serialization.IntegerDeserializer
 import org.apache.kafka.common.serialization.IntegerSerializer
 import org.apache.kafka.common.serialization.StringDeserializer
@@ -17,12 +19,15 @@ import org.springframework.kafka.core.DefaultKafkaConsumerFactory
 import org.springframework.kafka.core.DefaultKafkaProducerFactory
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.kafka.core.ProducerFactory
+import org.springframework.messaging.support.GenericMessage
 
 
 fun main() {
   val context = AnnotationConfigApplicationContext(KafkaConfiguration::class.java)
   val kafkaTemplate = context.getBean(KafkaTemplate::class.java) as KafkaTemplate<Int, String>
-  val sendAckFuture = kafkaTemplate.send("test", "a message").completable()
+  val sendAckFuture = kafkaTemplate
+    .send(ProducerRecord("test", 0, "a key value message"))
+    .completable()
   sendAckFuture.thenAccept { sendResult ->
     println("message ${sendResult.producerRecord.value()} sent")
   }
@@ -30,8 +35,8 @@ fun main() {
 
 class Listener {
   @KafkaListener(id = "stringGroup", topics = ["test"])
-  fun listen(message: String) {
-    println("message $message received")
+  fun listen(record: ConsumerRecord<Int, String>) {
+    println("message:\"${record.value()}\" received, with message key:\"${record.key()}\", partition:\"${record.partition()}\", message headers:\"${record.headers()}\"")
   }
 }
 
