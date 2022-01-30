@@ -22,8 +22,8 @@ import org.springframework.kafka.core.ProducerFactory
 fun main() {
   val context = AnnotationConfigApplicationContext(KafkaConfiguration::class.java)
   val kafkaTemplate = context.getBean(KafkaTemplate::class.java) as KafkaTemplate<Int, String>
-  val sendAck = kafkaTemplate.send("test", "a message").completable()
-  sendAck.thenAccept { sendResult ->
+  val sendAckFuture = kafkaTemplate.send("test", "a message").completable()
+  sendAckFuture.thenAccept { sendResult ->
     println("message ${sendResult.producerRecord.value()} sent")
   }
 }
