@@ -32,7 +32,7 @@ class SendMessageController {
       future.get()
       ok("message sent")
     } catch (e: ExecutionException){
-      internalServerError().body("error sending message with error ${e.message}")
+      internalServerError().body("error sending message: ${e.message}")
     }
   }
 }
