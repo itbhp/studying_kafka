@@ -21,6 +21,7 @@ import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.kafka.core.ProducerFactory
 
 
+@Suppress("UNCHECKED_CAST")
 fun main() {
   val context = AnnotationConfigApplicationContext(KafkaConfiguration::class.java)
   val kafkaTemplate = context.getBean(KafkaTemplate::class.java) as KafkaTemplate<Int, String>
