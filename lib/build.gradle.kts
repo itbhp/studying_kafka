@@ -8,7 +8,7 @@
 
 plugins {
   // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
-  id("org.jetbrains.kotlin.jvm") version "1.5.0"
+  id("org.jetbrains.kotlin.jvm") version "1.9.20"
 
   // Apply the java-library plugin for API and implementation separation.
   `java-library`
@@ -19,11 +19,18 @@ repositories {
   mavenCentral()
 }
 
+java {
+  toolchain {
+    setSourceCompatibility(JavaLanguageVersion.of(21))
+    setTargetCompatibility(JavaLanguageVersion.of(21))
+  }
+}
+
 dependencies {
   // Align versions of all Kotlin components
   implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
-  implementation(platform("org.springframework.boot:spring-boot-dependencies:2.6.3"))
+  implementation(platform("org.springframework.boot:spring-boot-dependencies:3.2.2"))
   implementation("org.springframework.boot","spring-boot-starter-web")
-  implementation("org.springframework.kafka:spring-kafka:2.8.2")
-  testImplementation("org.junit.jupiter:junit-jupiter-engine:5.8.2")
+  implementation("org.springframework.kafka:spring-kafka:3.1.1")
+  testImplementation("org.junit.jupiter:junit-jupiter-engine:5.10.1")
 }

@@ -27,7 +27,6 @@ class SendMessageController {
     val message = "spring boot message"
     val future: CompletableFuture<SendResult<Int, String>> = kafkaTemplate
       .send(this.kafkaTopic, 0, message)
-      .completable()
     return try {
       future.get()
       ok("message sent")
