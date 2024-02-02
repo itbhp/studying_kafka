@@ -27,7 +27,6 @@ fun main() {
   val kafkaTemplate = context.getBean(KafkaTemplate::class.java) as KafkaTemplate<Int, String>
   val sendAckFuture = kafkaTemplate
     .send(ProducerRecord("test", 0, "a key value message"))
-    .completable()
   sendAckFuture.thenAccept { sendResult ->
     println("message ${sendResult.producerRecord.value()} sent")
   }
